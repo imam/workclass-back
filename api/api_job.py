@@ -18,7 +18,7 @@ def jobs(req):
   params = get_params(req)
 
   keyword = params.get("keyword")
-  page_size = params.get("pageSize", 12) # default is 12
+  page_size = int(params.get("pageSize", 12)) # default is 12
   
   jobs = Job.objects
 
