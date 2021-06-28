@@ -23,7 +23,7 @@ def jobs(req):
   jobs = Job.objects
 
   if keyword:
-    jobs.filter(title__icontains=keyword)
+    jobs = jobs.filter(title__icontains=keyword)
 
   # order by descending date
   jobs = jobs.order_by("-activation_date")
