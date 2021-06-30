@@ -11,6 +11,9 @@ https://docs.djangoproject.com/en/3.1/ref/settings/
 """
 
 from pathlib import Path
+import environ
+env = environ.Env()
+environ.Env.read_env()
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -42,6 +45,7 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'corsheaders',
     'database',
+    'algoliasearch_django',
 ]
 
 MIDDLEWARE = [
@@ -123,3 +127,8 @@ USE_TZ = True
 # https://docs.djangoproject.com/en/3.1/howto/static-files/
 
 STATIC_URL = '/static/'
+
+ALGOLIA = {
+    'APPLICATION_ID': env('ALGOLIA_APP_ID'),
+    'API_KEY': env('ALGOLIA_API')
+}
