@@ -3,7 +3,7 @@ from django.forms.models import model_to_dict
 from django.utils import timezone
 from django.dispatch import receiver
 from django.db.models.signals import pre_save
-from api.utils import check_job_type, check_employment_type
+from api.utils import check_job_type, check_employment_type, get_median_salary
 
 class Job(models.Model):
   class SalaryPeriodChoice(models.TextChoices):
@@ -23,6 +23,7 @@ class Job(models.Model):
   salary_from = models.FloatField(null=True)
   salary_period = models.CharField(max_length=7, choices=SalaryPeriodChoice.choices)
   salary_to = models.FloatField(null=True)
+  salary_median = models.FloatField(null=True)
   job_type = models.CharField(null=True, max_length=400)
   employment_type = models.CharField(null=True, max_length=400)
 
@@ -69,3 +70,11 @@ Populate Employment Type Field Before Saving
 @receiver(pre_save, sender=Job, dispatch_uid='update_employment_field')
 def update_job_field(sender, instance, **kwargs):
   instance.employment_type = check_employment_type(instance)
+
+
+"""
+Populate Salary Median Field Before Saving
+"""
+@receiver(pre_save, sender=Job, dispatch_uid='update_median_field')
+def update_median_field(sender, instance, **kwargs):
+  instance.salary_median = get_median_salary(instance)

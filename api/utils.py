@@ -75,3 +75,22 @@ def check_employment_type(employment):
 			employment_type = type	
 
 	return employment_types[employment_type]
+
+def convert_to_monthly(salary, recurring_type):
+	if(recurring_type == "hourly"):
+		return salary * 8 * 5 * 4
+	if(recurring_type == "daily"):
+		return salary * 5 * 4
+	if(recurring_type == "weekly"):
+		return salary * 5 * 4
+	if(recurring_type == "yearly"):
+		return salary / 12
+	if(recurring_type == "monthly"):
+		return salary
+	return salary
+
+def get_median_salary(job):
+	salary_from_median = convert_to_monthly(job.salary_from, job.salary_period) if job.salary_from is not None else 0
+	salary_to_median = convert_to_monthly(job.salary_to, job.salary_period) if job.salary_to is not None else 0
+
+	return (salary_to_median + salary_from_median) / 2
