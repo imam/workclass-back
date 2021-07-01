@@ -12,6 +12,8 @@ https://docs.djangoproject.com/en/3.1/ref/settings/
 
 from pathlib import Path
 import environ
+import django_heroku
+
 env = environ.Env()
 environ.Env.read_env()
 
@@ -132,3 +134,6 @@ ALGOLIA = {
     'APPLICATION_ID': env('ALGOLIA_APP_ID'),
     'API_KEY': env('ALGOLIA_API')
 }
+
+# Activate Django-Heroku.
+django_heroku.settings(locals())
