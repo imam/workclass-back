@@ -19,6 +19,7 @@ def jobs(req):
 
   keyword = params.get("keyword")
   page_size = int(params.get("pageSize", 12)) # default is 12
+  sort_by = params.get("sort_by")
   
   jobs = Job.objects
 
@@ -26,10 +27,14 @@ def jobs(req):
     jobs = jobs.filter(title__icontains=keyword)
 
   # order by descending date
-  jobs = jobs.order_by("-activation_date")
+  if sort_by == "median":
+    jobs = jobs.order_by("-salary_median")
+  else:
+    jobs = jobs.order_by("-activation_date")
   
   # Trim the amount of jobs to return
   jobs = jobs.values()[:page_size]
+
 
   return jsonify({ "success": True, "jobs": list(jobs) })
 
