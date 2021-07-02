@@ -6,7 +6,6 @@ from database.models import Job
 Database seeding
 '''
 
-
 class Command(BaseCommand):
     help = 'Seed the database'
 
