@@ -4,6 +4,8 @@ from django.utils import timezone
 from django.dispatch import receiver
 from django.db.models.signals import pre_save
 from api.utils import check_job_type, check_employment_type, get_median_salary
+import ciso8601
+import time
 
 class Job(models.Model):
   class SalaryPeriodChoice(models.TextChoices):
@@ -18,6 +20,7 @@ class Job(models.Model):
   title = models.CharField(max_length=400)
   description = models.TextField()
   activation_date = models.DateTimeField(default=timezone.now)
+  unix_activation_date = models.CharField(null=True, max_length=400)
   active = models.BooleanField()
   featured = models.BooleanField()
   salary_from = models.FloatField(null=True)
@@ -78,3 +81,10 @@ Populate Salary Median Field Before Saving
 @receiver(pre_save, sender=Job, dispatch_uid='update_median_field')
 def update_median_field(sender, instance, **kwargs):
   instance.salary_median = get_median_salary(instance)
+
+"""
+Populate Unix Activation Date (Algolia prefer date stored in unix)
+"""
+@receiver(pre_save, sender=Job, dispatch_uid='update_unix_activation_date')
+def update_unix_activation_date(sender, instance, **kwargs):
+  instance.unix_activation_date = time.mktime(instance.activation_date.timetuple())
